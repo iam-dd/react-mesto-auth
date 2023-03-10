@@ -1,0 +1,9 @@
+.card__sign {
+  height: 80px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 15px 0 21px;
+}

@@ -1,0 +1,35 @@
+.profile__avatar-button {
+  width: 120px;
+  height: 120px;
+  background-color: #696969;
+  border-radius: 50%;
+  border: none;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 1;
+  transition: .5s;
+  
+}
+
+
+.profile__avatar-button:hover {
+ cursor: pointer;
+ opacity: .4;
+}
+
+
+@media screen and (max-width: 712px) {
+  .profile__avatar-button {
+    margin: 0 auto 10px;
+    grid-row: 1;
+    place-self: center;
+
+  }
+}
+
+.avatarButtonContainer {
+  background-image: url(../../../images/pen.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}

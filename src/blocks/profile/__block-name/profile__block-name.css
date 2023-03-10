@@ -1,0 +1,17 @@
+.profile__block-name {
+  display: grid;
+  grid: min-content / auto auto;
+  row-gap: 10px;
+  column-gap: 18px;
+  margin: 0 0 23px 32px;
+}
+
+
+@media screen and (max-width: 510px) {
+  .profile__block-name {
+    row-gap: 0;
+    column-gap: 10px;
+    margin: 9px 0 0 26px;
+    
+  }
+}

@@ -1,0 +1,16 @@
+.page__header {
+  margin: 0 auto 40px;
+}
+
+@media screen and (max-width: 712px) {
+  .page__header {
+    margin: 45px 30px 40px;
+  }
+}
+
+@media screen and (max-width: 435px) {
+  .page__header {
+    margin: 28px auto 42px;
+  }
+}
+

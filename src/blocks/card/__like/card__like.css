@@ -1,0 +1,17 @@
+.card__like {
+  width: 25px;
+  height: 25px;
+  background-image: url(../../../images/heart_disabled.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  border: 0;
+  background-color: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+
+.card__like:hover {
+  background-image: url(../../../images/heart_hover.svg);
+}

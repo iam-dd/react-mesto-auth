@@ -1,0 +1,12 @@
+.profile__avatar {
+  max-width: 120px;
+  min-height: 120px;
+  margin: 0;
+  opacity: 1;
+  transition: .5s;
+  border-radius: 50%;
+}
+
+.profile__avatar:hover {
+  opacity: .2;
+}

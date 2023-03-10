@@ -1,0 +1,5 @@
+.card__like_state_hover:hover {
+  background-image: url(../../../images/heart_hover.svg);
+  cursor: pointer;
+
+}

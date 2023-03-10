@@ -1,0 +1,16 @@
+.card {
+  width: 280px;
+  height: 360px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  
+}
+
+@media screen and (max-width: 435px) {
+  .card {
+    margin: 0 auto;
+  }
+}
