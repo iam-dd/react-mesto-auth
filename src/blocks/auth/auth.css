@@ -59,6 +59,7 @@
 
 .auth__block {
   display: flex;
+  align-items: baseline;
 }
 
 .auth__email {
@@ -77,7 +78,7 @@
   margin: 0;
   margin-right: 30px;
   padding: 0;
-  color: #a9a9a9;
+  color: #fff;
   font-family: "Inter";
   font-style: normal;
   font-weight: 400;
@@ -86,6 +87,12 @@
   text-decoration: none;
   background-color: #000;
   border: 0;
+  cursor: pointer;
+  transition: .5s;
+}
+
+.auth__enter:hover {
+  color: #a9a9a9;
 }
 
 .auth__link {
@@ -99,4 +106,27 @@
   font-size: 14px;
   line-height: 17px;
   text-decoration: none;
+}
+.auth__link:hover {
+  color: #a9a9a9;
+}
+
+@media screen and (max-width: 500px) {
+.auth__block {
+  width: 100%;
+  border-bottom: 1px solid #545454;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto 27px;
+  
+}
+
+.auth__email {
+  margin: auto;
+}
+
+.auth__enter {
+  margin: 18px auto 40px;
+}
+  
 }

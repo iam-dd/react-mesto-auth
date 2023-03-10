@@ -30,7 +30,7 @@ function Login({ onSubmit }) {
           required
           placeholder="Email"
           onChange={handleChange}
-        ></input>
+        />
         <input
           className="auth__input"
           name="password"
@@ -38,7 +38,8 @@ function Login({ onSubmit }) {
           required
           placeholder="Пароль"
           onChange={handleChange}
-        ></input>
+          minLength="5"
+        />
       </form>
       <button className="auth__button" onClick={handleSubmit}>
         Войти

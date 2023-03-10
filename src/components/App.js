@@ -14,6 +14,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
+import InfoToolTip from "./InfoTooltip";
 
 function App() {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ name: "", link: "" });
+    setShowToolTip(false);
   }
 
   function handleAddPlaceSubmit(data) {
@@ -56,21 +58,30 @@ function App() {
   function handleRegister({ email, password }) {
     auth
       .registration({ email, password })
-      .then(console.log("regidter ok"))
-      .catch((err) => console.log(err))
-      .finally(navigate("/sign-in"));
+      .then((res) => {
+        setToolTipType(true);
+        handleShowToolTip();
+        navigate("/sign-in");
+      })
+      .catch((err) => {
+        console.log(err);
+        setToolTipType(false);
+        handleShowToolTip();
+      });
   }
 
   function handleLogin({ email, password }) {
     auth
       .login({ email, password })
-      .then((res) => localStorage.setItem("jwt", res.token))
-      .then(setLoggedIn(true))
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        setLoggedIn(true);
+      })
       .catch((err) => console.log(err));
   }
 
   function handleSignOut() {
-    localStorage.clear();
+    localStorage.removeItem("jwt");
     setLoggedIn(false);
   }
 
@@ -89,8 +100,11 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [showToolTip, setShowToolTip] = React.useState(false);
+  const [toolTipType, setToolTipType] = React.useState(null);
 
   const isOpen =
+    showToolTip ||
     isEditAvatarPopupOpen ||
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
@@ -105,8 +119,7 @@ function App() {
           .then(setLoggedIn(true))
           .catch((err) => console.log(err))
       : setLoggedIn(false);
-  }, []);
- 
+  }, [userEmail, loggedIn]);
 
   React.useEffect(() => {
     function closeByEscape(evt) {
@@ -189,6 +202,10 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function handleShowToolTip() {
+    setShowToolTip(true);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header
@@ -253,6 +270,12 @@ function App() {
         onClose={closeAllPopups}
         onSubmit={handleAddPlaceSubmit}
         isLoading={isLoading}
+      />
+
+      <InfoToolTip
+        isOpen={showToolTip}
+        onClose={closeAllPopups}
+        toolTipType={toolTipType}
       />
 
       <PopupWithForm name="confirmation" title="Вы уверены ?" />
