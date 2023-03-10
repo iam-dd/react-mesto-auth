@@ -15,7 +15,8 @@ function Login({ onSubmit }) {
     });
   }
 
-  function handleSubmit() {
+  function handleSubmit(e) {
+    e.preventDefault()
     onSubmit(inputsValue);
   }
 
@@ -40,10 +41,11 @@ function Login({ onSubmit }) {
           onChange={handleChange}
           minLength="5"
         />
+         <button className="auth__button" type="submit" onClick={handleSubmit}>Войти</button>
       </form>
-      <button className="auth__button" onClick={handleSubmit}>
-        Войти
-      </button>
+     
+        
+     
     </div>
   );
 }

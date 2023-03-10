@@ -17,7 +17,8 @@ function Register({ onSubmit }) {
     });
   }
 
-  function handleSubmit() {
+  function handleSubmit(e) {
+    e.preventDefault();
     onSubmit(inputsValue);
   }
 
@@ -32,7 +33,6 @@ function Register({ onSubmit }) {
           required
           placeholder="Email"
           onChange={handleChange}
-          
         />
         <input
           className="auth__input"
@@ -42,10 +42,11 @@ function Register({ onSubmit }) {
           placeholder="Пароль"
           onChange={handleChange}
         />
+        <button className="auth__button" type="submit" onClick={handleSubmit}>
+          Зарегистрироваться
+        </button>
       </form>
-      <button className="auth__button" onClick={handleSubmit}>
-        Зарегистрироваться
-      </button>
+
       <Link to="/sign-in" className="auth__link">
         Уже зарегистрированы? Войти
       </Link>

@@ -71,7 +71,7 @@ function App() {
   }
 
   function handleLogin({ email, password }) {
-    auth
+        auth
       .login({ email, password })
       .then((res) => {
         localStorage.setItem("jwt", res.token);
