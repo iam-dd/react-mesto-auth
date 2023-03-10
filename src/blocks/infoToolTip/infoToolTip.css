@@ -3,17 +3,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 280px;
-  height: 308px;
+  width: 430px;
+  height: 330px;
   padding-top: 50px;
-  justify-content: space-between;
+  justify-content: start;
 }
-
 .infoToolTip__message {
+  width: 358px;
   font-family: "Inter";
   font-style: normal;
   font-weight: 900;
   font-size: 20px;
   line-height: 24px;
   text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+  .infoToolTip {
+    width: 280px;
+    height: 308px;
+  }
 }
