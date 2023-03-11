@@ -17,7 +17,43 @@ import Register from "./Register";
 import InfoToolTip from "./InfoTooltip";
 
 function App() {
+
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState("");
+
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
+    React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
+    React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({
+    name: "",
+    link: "",
+  });
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [cards, setCards] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [showToolTip, setShowToolTip] = React.useState(false);
+  const [toolTipType, setToolTipType] = React.useState(null);
+
+  const isOpen =
+    showToolTip ||
+    isEditAvatarPopupOpen ||
+    isEditProfilePopupOpen ||
+    isAddPlacePopupOpen ||
+    selectedCard.link;
+
+    React.useEffect(() => {
+      if (loggedIn) {
+        Promise.all([api.getInitialCards(), api.getUserInfo()])
+          .then(([cards, userData]) => {
+            setCards(cards);
+            setCurrentUser(userData);
+          })
+          .catch((err) => console.log(err));
+      }
+    }, [loggedIn]);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -60,13 +96,13 @@ function App() {
       .registration({ email, password })
       .then((res) => {
         setToolTipType(true);
-        handleShowToolTip();
+        setShowToolTip(true)
         navigate("/sign-in");
       })
       .catch((err) => {
         console.log(err);
         setToolTipType(false);
-        handleShowToolTip();
+        setShowToolTip(true)
       });
   }
 
@@ -77,7 +113,11 @@ function App() {
         localStorage.setItem("jwt", res.token);
         setLoggedIn(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setToolTipType(false);
+        setShowToolTip(true)
+      });
   }
 
   function handleSignOut() {
@@ -85,30 +125,7 @@ function App() {
     setLoggedIn(false);
   }
 
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [userEmail, setUserEmail] = React.useState("");
 
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({
-    name: "",
-    link: "",
-  });
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [showToolTip, setShowToolTip] = React.useState(false);
-  const [toolTipType, setToolTipType] = React.useState(null);
-
-  const isOpen =
-    showToolTip ||
-    isEditAvatarPopupOpen ||
-    isEditProfilePopupOpen ||
-    isAddPlacePopupOpen ||
-    selectedCard.link;
 
   React.useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -135,14 +152,17 @@ function App() {
     }
   }, [isOpen]);
 
-  React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  // React.useEffect(() => {
+  //   loggedIn ?
+  //   api
+  //     .getUserInfo()
+  //     .then((res) => {
+  //       setCurrentUser(res);
+  //     })
+  //     .catch((err) => console.log(err))
+  //     : console.log(Авто);
+      
+  // }, [loggedIn]);
 
   function handleUpdateUser(userData) {
     setIsLoading(true);
@@ -172,14 +192,16 @@ function App() {
       .finally(() => setIsLoading(false));
   }
 
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((res) => {
-        setCards(res);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  // React.useEffect(() => {
+  //   loggedIn ?
+  //   api
+  //     .getInitialCards()
+  //     .then((res) => {
+  //       setCards(res);
+  //     })
+  //     .catch((err) => console.log(err))
+  //     : console.log("Вы не авторизованы")
+  // }, [loggedIn]);
 
   function handleCardDelete(card) {
     api
@@ -202,9 +224,6 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function handleShowToolTip() {
-    setShowToolTip(true);
-  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
