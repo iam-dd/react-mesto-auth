@@ -3,7 +3,7 @@ import errorImage from "../images/error.svg";
 import "../blocks/infoToolTip/infoToolTip.css";
 import regOk from "../images/regok.svg";
 
-function InfoToolTip({ isOpen, onClose, name, toolTipType }) {
+function InfoToolTip({ textMessage, isOpen, onClose, name, toolTipType }) {
   return (
     <section
       className={`popup popup_section_${name} ${isOpen ? "popup_opened" : ""}`}
@@ -14,21 +14,12 @@ function InfoToolTip({ isOpen, onClose, name, toolTipType }) {
           type="button"
           onClick={onClose}
         />
-        {toolTipType ? (
-          <>
-            <img src={regOk} alt="Успешная регистрация" />
-            <p className="infoToolTip__message">
-              Вы успешно зарегистрировались!
-            </p>
-          </>
-        ) : (
-          <>
-            <img src={errorImage} alt="Ошибка регистрации" />
-            <p className="infoToolTip__message">
-              Что-то пошло не так! Попробуйте ещё раз.
-            </p>
-          </>
-        )}
+
+        <img
+          src={toolTipType ? regOk : errorImage}
+          alt={toolTipType ? "Успешная регистрация" : "Ошибка регистрации"}
+        />
+        <p className="infoToolTip__message">{textMessage}</p>
       </div>
     </section>
   );

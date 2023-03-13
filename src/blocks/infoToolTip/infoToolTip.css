@@ -6,7 +6,7 @@
   width: 430px;
   height: 330px;
   padding-top: 50px;
-  justify-content: start;
+  justify-content: flex-start;
 }
 .infoToolTip__message {
   width: 358px;

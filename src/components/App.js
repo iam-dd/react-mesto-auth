@@ -36,6 +36,7 @@ function App() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [showToolTip, setShowToolTip] = React.useState(false);
   const [toolTipType, setToolTipType] = React.useState(null);
+  const [textMessage, setTextMessage] = React.useState('')
 
   const isOpen =
     showToolTip ||
@@ -97,12 +98,14 @@ function App() {
       .then((res) => {
         setToolTipType(true);
         setShowToolTip(true)
+        setTextMessage('Вы успешно зарегистрировались!')
         navigate("/sign-in");
       })
       .catch((err) => {
         console.log(err);
         setToolTipType(false);
         setShowToolTip(true)
+        setTextMessage('Что-то пошло не так! Попробуйте ещё раз.')
       });
   }
 
@@ -117,6 +120,7 @@ function App() {
         console.log(err);
         setToolTipType(false);
         setShowToolTip(true)
+        setTextMessage('Что-то пошло не так! Попробуйте ещё раз.')
       });
   }
 
@@ -152,18 +156,6 @@ function App() {
     }
   }, [isOpen]);
 
-  // React.useEffect(() => {
-  //   loggedIn ?
-  //   api
-  //     .getUserInfo()
-  //     .then((res) => {
-  //       setCurrentUser(res);
-  //     })
-  //     .catch((err) => console.log(err))
-  //     : console.log(Авто);
-      
-  // }, [loggedIn]);
-
   function handleUpdateUser(userData) {
     setIsLoading(true);
     api
@@ -191,17 +183,6 @@ function App() {
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
   }
-
-  // React.useEffect(() => {
-  //   loggedIn ?
-  //   api
-  //     .getInitialCards()
-  //     .then((res) => {
-  //       setCards(res);
-  //     })
-  //     .catch((err) => console.log(err))
-  //     : console.log("Вы не авторизованы")
-  // }, [loggedIn]);
 
   function handleCardDelete(card) {
     api
@@ -295,6 +276,7 @@ function App() {
         isOpen={showToolTip}
         onClose={closeAllPopups}
         toolTipType={toolTipType}
+        textMessage={textMessage}
       />
 
       <PopupWithForm name="confirmation" title="Вы уверены ?" />
