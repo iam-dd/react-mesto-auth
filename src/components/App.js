@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
@@ -17,44 +17,43 @@ import Register from "./Register";
 import InfoToolTip from "./InfoTooltip";
 
 function App() {
-
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [userEmail, setUserEmail] = React.useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
 
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({
     name: "",
     link: "",
   });
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [showToolTip, setShowToolTip] = React.useState(false);
-  const [toolTipType, setToolTipType] = React.useState(null);
-  const [textMessage, setTextMessage] = React.useState('')
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [toolTipType, setToolTipType] = useState({
+    status: false,
+    text: "",
+    open: false,
+  });
 
   const isOpen =
-    showToolTip ||
+    toolTipType.open ||
     isEditAvatarPopupOpen ||
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
     selectedCard.link;
 
-    React.useEffect(() => {
-      if (loggedIn) {
-        Promise.all([api.getInitialCards(), api.getUserInfo()])
-          .then(([cards, userData]) => {
-            setCards(cards);
-            setCurrentUser(userData);
-          })
-          .catch((err) => console.log(err));
-      }
-    }, [loggedIn]);
+  useEffect(() => {
+    if (loggedIn) {
+      Promise.all([api.getInitialCards(), api.getUserInfo()])
+        .then(([cards, userData]) => {
+          setCards(cards);
+          setCurrentUser(userData);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [loggedIn]);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -77,7 +76,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ name: "", link: "" });
-    setShowToolTip(false);
+    setToolTipType({ status: false, open: false, text: "" });
   }
 
   function handleAddPlaceSubmit(data) {
@@ -96,21 +95,25 @@ function App() {
     auth
       .registration({ email, password })
       .then((res) => {
-        setToolTipType(true);
-        setShowToolTip(true)
-        setTextMessage('Вы успешно зарегистрировались!')
+        setToolTipType({
+          status: true,
+          open: true,
+          text: "Вы успешно зарегистрировались!",
+        });
         navigate("/sign-in");
       })
       .catch((err) => {
         console.log(err);
-        setToolTipType(false);
-        setShowToolTip(true)
-        setTextMessage('Что-то пошло не так! Попробуйте ещё раз.')
+        setToolTipType({
+          status: false,
+          open: true,
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
       });
   }
 
   function handleLogin({ email, password }) {
-        auth
+    auth
       .login({ email, password })
       .then((res) => {
         localStorage.setItem("jwt", res.token);
@@ -118,9 +121,11 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-        setToolTipType(false);
-        setShowToolTip(true)
-        setTextMessage('Что-то пошло не так! Попробуйте ещё раз.')
+        setToolTipType({
+          status: false,
+          open: true,
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
       });
   }
 
@@ -129,9 +134,7 @@ function App() {
     setLoggedIn(false);
   }
 
-
-
-  React.useEffect(() => {
+  useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     jwt
       ? auth
@@ -142,7 +145,7 @@ function App() {
       : setLoggedIn(false);
   }, [userEmail, loggedIn]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     function closeByEscape(evt) {
       if (evt.key === "Escape") {
         closeAllPopups();
@@ -204,7 +207,6 @@ function App() {
       })
       .catch((err) => console.log(err));
   }
-
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -272,12 +274,7 @@ function App() {
         isLoading={isLoading}
       />
 
-      <InfoToolTip
-        isOpen={showToolTip}
-        onClose={closeAllPopups}
-        toolTipType={toolTipType}
-        textMessage={textMessage}
-      />
+      <InfoToolTip onClose={closeAllPopups} toolTipType={toolTipType} />
 
       <PopupWithForm name="confirmation" title="Вы уверены ?" />
 
